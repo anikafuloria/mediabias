@@ -34,7 +34,10 @@ for article in articles:
         caption = m["caption"]
         url = "https://www.nytimes.com/" + m["url"]
 
-        if mediatype == "image" and caption != None:
+        if mediatype == "image":
             file.write(url + "\n")
-            file.write(caption + "\n")
-        file.write("\n")
+            if caption != None:
+                file.write(caption, "\n")
+            else:
+                file.write("no caption\n")
+    file.write("\n")
