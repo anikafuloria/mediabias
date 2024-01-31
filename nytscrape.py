@@ -13,20 +13,28 @@ end = datetime(2024, 1, 31)
 # Set the beginning and end dates for the search.
 date_dict = {"begin":begin, "end":end}
 
+options_dict = {
+    "type_of_material": [ "News Analysis", "News", "Article" ]
+}
+
 nyt = NYTAPI(api_key, parse_dates=True)
 
 file = open('readdata.txt', 'w')
 
 articles = nyt.article_search(query = "Israel Palestine", 
                               results = 25,
-                              dates = date_dict)
+                              dates = date_dict,
+                              options = options_dict)
+
 
 for article in articles:
     weburl = article["web_url"]
+    title = article["headline"]["main"]
     abstract = article["abstract"]
 
-    file.write(weburl + "\n")
-    file.write(abstract + "\n")
+    file.write("URL: " + weburl + "\n")
+    file.write("TITLE: " + title + "\n")
+    file.write("ABSTRACT: " + abstract + "\n")
     
     multimedia = article["multimedia"]
     for m in multimedia:
@@ -35,9 +43,9 @@ for article in articles:
         url = "https://www.nytimes.com/" + m["url"]
 
         if mediatype == "image":
-            file.write(url + "\n")
+            file.write("IMAGE URL: " + url + "\n")
             if caption != None:
-                file.write(caption, "\n")
+                file.write("CAPTION: " + caption + "\n")
             else:
-                file.write("no caption\n")
+                file.write("CAPTION: no caption" + "\n")
     file.write("\n")
